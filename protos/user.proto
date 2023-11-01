@@ -1,0 +1,25 @@
+// protobufの構文バージョンを指定
+syntax = "proto3";
+
+
+// サービス名？みたいなもの
+service UserManager {
+  // getメソッドを提供している、UserRequestを受け取りUserResponseを返す
+  rpc get (UserRequest) returns (UserResponse) {}
+}
+
+
+// messageにデータ構造を定義
+message User {
+  uint32 id = 1;
+  string name = 2;
+  bool is_admin = 3;
+}
+
+message UserRequest {
+  uint32 id = 1;
+}
+
+message UserResponse {
+  User user = 1;
+}
