@@ -29,7 +29,8 @@ const App: NextPage = () => {
     }
   };
   const testFetch = async() => {
-    const result = await fetch("/api/test", {method: "POST"})
+    const result = await fetch("/api/test")
+    console.log(result)
   }
 
   return (
