@@ -1,4 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
+import { NextResponse, NextRequest } from 'next/server'
 import { credentials, ServiceError } from "@grpc/grpc-js";
 
 import { UserManagerClient } from "../../../../codegen/protos/user_grpc_pb";
@@ -14,18 +15,22 @@ export type UserApiResponse =
   | { ok: true; user: UserResponse.AsObject["user"] }
   | { ok: false; error: ServiceError };
 
-export default function handler(
-  apiReq: NextApiRequest,
-  apiRes: NextApiResponse<UserApiResponse>
-) {
-  const { id } = JSON.parse(apiReq.body);
-  Request.setId(id);
+export const POST = (
+  apiReq: NextRequest,
+  apiRes: NextApiResponse<UserApiResponse>,
+) => {
+  console.log("リクエストボディー", apiReq.body)
+  console.log("JSON.stringify", JSON.stringify(apiReq.body))
+  const id = JSON.stringify(apiReq.body);
+  Request.setId(Number(id))
   Client.get(Request, (grpcErr, grpcRes) => {
     if (grpcErr) {
-      apiRes.status(500).json({ ok: false, error: grpcErr });
+      console.log("エラー")
+      return apiRes.status(500).json({ ok: false, error: grpcErr });
     } else {
+      console.log("成功")
       const { user } = grpcRes.toObject();
-      apiRes.status(200).json({ ok: true, user });
+      return apiRes.status(200).json({ ok: true, user });
     }
   });
 }

@@ -15,10 +15,10 @@ const App: NextPage = () => {
 
     const res = await fetch("/api/user", {
       method: "POST",
-      body: JSON.stringify({ id }),
+      body: JSON.stringify(id),
     });
 
-    const json: UserApiResponse = await res.json();
+    const json: UserApiResponse = await res.json()
 
     if (json.ok) {
       const { user } = json;
@@ -28,9 +28,23 @@ const App: NextPage = () => {
       setResult(`Error! ${code}: ${details}`);
     }
   };
+
   const testFetch = async() => {
-    const result = await fetch("/api/test")
-    console.log(result)
+    const result = await fetch("/api/test", {})
+    console.log("res",result)
+  }
+
+  const testPOST = async() => {
+    const result = await fetch("/api/test", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: 2,
+        hoge: "test"
+      })
+    })
   }
 
   return (
@@ -51,6 +65,7 @@ const App: NextPage = () => {
       })}
       <p>{result}</p>
       <button onClick={testFetch}>リクエストテスト</button>
+      <button onClick={testPOST}>POSTテスト</button>
     </div>
   );
 };
