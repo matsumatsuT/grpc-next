@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "npx ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.9.9",

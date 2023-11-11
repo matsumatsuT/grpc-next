@@ -15,7 +15,7 @@ const App: NextPage = () => {
 
     const res = await fetch("/api/user", {
       method: "POST",
-      body: JSON.stringify(id),
+      body: JSON.stringify({id}),
     });
 
     const json: UserApiResponse = await res.json()
@@ -45,6 +45,8 @@ const App: NextPage = () => {
         hoge: "test"
       })
     })
+
+    console.log(result)
   }
 
   return (

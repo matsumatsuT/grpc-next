@@ -15,22 +15,27 @@ export type UserApiResponse =
   | { ok: true; user: UserResponse.AsObject["user"] }
   | { ok: false; error: ServiceError };
 
-export const POST = (
+
+  //　うまいことreturnすれば動きそう
+export const POST = async (
   apiReq: NextRequest,
-  apiRes: NextApiResponse<UserApiResponse>,
+  apiRes: NextResponse<UserApiResponse>
 ) => {
-  console.log("リクエストボディー", apiReq.body)
-  console.log("JSON.stringify", JSON.stringify(apiReq.body))
-  const id = JSON.stringify(apiReq.body);
-  Request.setId(Number(id))
-  Client.get(Request, (grpcErr, grpcRes) => {
+  const body = await apiReq.json()
+  console.log("body", body)
+  const id = await JSON.parse(body.id);
+  console.log(id)
+  Request.setId((id))
+  const res =  Client.get(Request, (grpcErr, grpcRes) => {
     if (grpcErr) {
       console.log("エラー")
-      return apiRes.status(500).json({ ok: false, error: grpcErr });
+      apiRes.status(500).json({ ok: false, error: grpcErr });
     } else {
       console.log("成功")
       const { user } = grpcRes.toObject();
-      return apiRes.status(200).json({ ok: true, user });
+      console.log(user)
+      return NextResponse.json({ok: true, user})
     }
   });
+  // return NextResponse.json({ok: true, res}, {status: 200})
 }
